@@ -76,6 +76,8 @@ require('lazy').setup({
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
+  'nvim-tree/nvim-web-devicons',
+
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
   {
@@ -151,6 +153,17 @@ require('lazy').setup({
       end,
     },
   },
+  -- {
+  --   -- Theme inspired by Atom
+  --  "loctvl842/monokai-pro.nvim",
+  --   priority = 1000,
+  --   config = function()
+  --     require("monokai-pro").setup({
+  --       filter = 'spectrum'
+  --     })
+  --     vim.cmd.colorscheme 'monokai-pro'
+  --   end,
+  -- },
 
   {
     -- Theme inspired by Atom
@@ -167,7 +180,7 @@ require('lazy').setup({
     -- See `:help lualine.txt`
     opts = {
       options = {
-        icons_enabled = false,
+        icons_enabled = true,
         theme = 'onedark',
         component_separators = '|',
         section_separators = '',
@@ -229,7 +242,7 @@ require('lazy').setup({
   --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {})
 
 -- [[ Setting options ]]
@@ -273,6 +286,13 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
+-- Enable relative numbers
+vim.opt.nu = true
+vim.opt.relativenumber = true
+
+require'nvim-web-devicons'.setup {
+  default = true
+}
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -288,6 +308,8 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous dia
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+vim.keymap.set('n', '<leader>ww', ':w<CR>', { noremap = true, silent = true, desc='Save file' })
+vim.keymap.set('n', '<leader>wq', ':q<CR>', { noremap = true, silent = true, desc='[Q]uit file' })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -299,6 +321,33 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = highlight_group,
   pattern = '*',
 })
+
+-- [ Neotree Keymaps ]]
+-- Keymaps for neotree
+vim.keymap.set('n', '<leader>o',  ':Neotree toggle<CR>', { noremap = true, silent = true, desc='[O]pen Neotree' })
+
+-- [ Harpoon Keymaps ]]
+-- Keymaps for harpoon
+vim.keymap.set('n', '<leader>ha', require('harpoon.mark').add_file, {desc = 'Harpoon: [A]dd mark'})
+vim.keymap.set('n', '<leader>hm', require("harpoon.ui").toggle_quick_menu, {desc = 'Harpoon: Toggle [M]enu'})
+vim.keymap.set('n', '<leader>hj', require("harpoon.ui").nav_next, {desc = 'Harpoon: Navigate to next mark'})
+vim.keymap.set('n', '<leader>hk', require("harpoon.ui").nav_prev, {desc = 'Harpoon: Navigate to prev mark'})
+
+-- [ Trouble Keymaps ]]
+-- Keymaps for Trouble
+
+vim.keymap.set('n', '<leader>tt',  ':TodoTelescope<CR>', { noremap = true, silent = true, desc='Check [T]odos in [T]elescop' })
+
+-- [ UndoTree Keymaps ]]
+-- Keymaps for UndoTree
+
+vim.keymap.set('n', '<leader>u', ':UndotreeToggle<CR>:UndotreeFocus<CR>')
+
+
+
+vim.opt.updatetime = 200
+
+
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
@@ -559,6 +608,12 @@ require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
 cmp.setup {
+  window = {
+    border = "rounded",
+  },
+  completion = {
+    border = "rounded",
+  },
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
