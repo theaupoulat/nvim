@@ -96,7 +96,10 @@ require('lazy').setup({
       'folke/neodev.nvim',
     },
   },
-
+  {
+    'stevearc/conform.nvim',
+    opts = {},
+  },
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -114,7 +117,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -290,7 +293,7 @@ vim.o.termguicolors = true
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
-require'nvim-web-devicons'.setup {
+require 'nvim-web-devicons'.setup {
   default = true
 }
 -- [[ Basic Keymaps ]]
@@ -308,8 +311,8 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous dia
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
-vim.keymap.set('n', '<leader>ww', ':w<CR>', { noremap = true, silent = true, desc='Save file' })
-vim.keymap.set('n', '<leader>wq', ':q<CR>', { noremap = true, silent = true, desc='[Q]uit file' })
+vim.keymap.set('n', '<leader>ww', ':w<CR>', { noremap = true, silent = true, desc = 'Save file' })
+vim.keymap.set('n', '<leader>wq', ':q<CR>', { noremap = true, silent = true, desc = '[Q]uit file' })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -324,19 +327,20 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 -- [ Neotree Keymaps ]]
 -- Keymaps for neotree
-vim.keymap.set('n', '<leader>o',  ':Neotree toggle<CR>', { noremap = true, silent = true, desc='[O]pen Neotree' })
+vim.keymap.set('n', '<leader>o', ':Neotree toggle<CR>', { noremap = true, silent = true, desc = '[O]pen Neotree' })
 
 -- [ Harpoon Keymaps ]]
 -- Keymaps for harpoon
-vim.keymap.set('n', '<leader>ha', require('harpoon.mark').add_file, {desc = 'Harpoon: [A]dd mark'})
-vim.keymap.set('n', '<leader>hm', require("harpoon.ui").toggle_quick_menu, {desc = 'Harpoon: Toggle [M]enu'})
-vim.keymap.set('n', '<leader>hj', require("harpoon.ui").nav_next, {desc = 'Harpoon: Navigate to next mark'})
-vim.keymap.set('n', '<leader>hk', require("harpoon.ui").nav_prev, {desc = 'Harpoon: Navigate to prev mark'})
+vim.keymap.set('n', '<leader>ha', require('harpoon.mark').add_file, { desc = 'Harpoon: [A]dd mark' })
+vim.keymap.set('n', '<leader>hm', require("harpoon.ui").toggle_quick_menu, { desc = 'Harpoon: Toggle [M]enu' })
+vim.keymap.set('n', '<leader>hj', require("harpoon.ui").nav_next, { desc = 'Harpoon: Navigate to next mark' })
+vim.keymap.set('n', '<leader>hk', require("harpoon.ui").nav_prev, { desc = 'Harpoon: Navigate to prev mark' })
 
 -- [ Trouble Keymaps ]]
 -- Keymaps for Trouble
 
-vim.keymap.set('n', '<leader>tt',  ':TodoTelescope<CR>', { noremap = true, silent = true, desc='Check [T]odos in [T]elescop' })
+vim.keymap.set('n', '<leader>tt', ':TodoTelescope<CR>',
+  { noremap = true, silent = true, desc = 'Check [T]odos in [T]elescop' })
 
 -- [ UndoTree Keymaps ]]
 -- Keymaps for UndoTree
@@ -394,7 +398,7 @@ local function live_grep_git_root()
   local git_root = find_git_root()
   if git_root then
     require('telescope.builtin').live_grep({
-      search_dirs = {git_root},
+      search_dirs = { git_root },
     })
   end
 end
@@ -427,7 +431,8 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim',
+      'bash' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -534,6 +539,17 @@ local on_attach = function(_, bufnr)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
 end
+
+require("conform").setup({
+  formatters_by_ft = {
+    typescript = { "prettier" },
+    typescriptreact = { "prettier" }
+  },
+  format_on_save = {
+    lsp_fallback = true,
+    timeout_ms = 500,
+  },
+})
 
 -- document existing key chains
 require('which-key').register {
