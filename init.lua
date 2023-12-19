@@ -156,24 +156,15 @@ require('lazy').setup({
       end,
     },
   },
-  -- {
-  --   -- Theme inspired by Atom
-  --  "loctvl842/monokai-pro.nvim",
-  --   priority = 1000,
-  --   config = function()
-  --     require("monokai-pro").setup({
-  --       filter = 'spectrum'
-  --     })
-  --     vim.cmd.colorscheme 'monokai-pro'
-  --   end,
-  -- },
-
   {
     -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
+    "loctvl842/monokai-pro.nvim",
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'onedark'
+      require("monokai-pro").setup({
+        filter = 'spectrum'
+      })
+      vim.cmd.colorscheme 'monokai-pro'
     end,
   },
 
@@ -184,7 +175,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = true,
-        theme = 'onedark',
+        theme = 'wombat',
         component_separators = '|',
         section_separators = '',
       },
@@ -293,6 +284,9 @@ vim.o.termguicolors = true
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
+-- Scroll padding
+vim.o.scrolloff = 8
+
 require 'nvim-web-devicons'.setup {
   default = true
 }
@@ -327,7 +321,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 -- [ Neotree Keymaps ]]
 -- Keymaps for neotree
-vim.keymap.set('n', '<leader>o', ':Neotree toggle<CR>', { noremap = true, silent = true, desc = '[O]pen Neotree' })
+vim.keymap.set('n', '<leader>no', ':Neotree toggle<CR>', { noremap = true, silent = true, desc = '[O]pen Neotree' })
+vim.keymap.set('n', '<leader>nr', ':Neotree reveal<CR>',
+  { noremap = true, silent = true, desc = '[R]eveal Neotree at current buffer' })
+
 
 -- [ Harpoon Keymaps ]]
 -- Keymaps for harpoon
@@ -424,6 +421,10 @@ vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc
 vim.keymap.set('n', '<leader>sG', ':LiveGrepGitRoot<cr>', { desc = '[S]earch by [G]rep on Git Root' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
+
+-- [[ More telescope]]
+--
+
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -549,6 +550,13 @@ require("conform").setup({
     lsp_fallback = true,
     timeout_ms = 500,
   },
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*",
+  callback = function(args)
+    require("conform").format({ bufnr = args.buf })
+  end,
 })
 
 -- document existing key chains
