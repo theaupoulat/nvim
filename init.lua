@@ -115,7 +115,12 @@ require('lazy').setup({
       'rafamadriz/friendly-snippets',
     },
   },
-
+  {
+    'github/copilot.vim'
+  },
+  {
+    'windwp/nvim-ts-autotag',
+  },
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim',  opts = {} },
   {
@@ -131,7 +136,7 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, { buffer = bufnr, desc = 'Preview git hunk' })
+        vim.keymap.set('n', '<leader>gp', require('gitsigns').preview_hunk, { buffer = bufnr, desc = 'Preview git hunk' })
 
         -- don't override the built-in and fugitive keymaps
         local gs = package.loaded.gitsigns
@@ -290,6 +295,13 @@ vim.o.scrolloff = 8
 require 'nvim-web-devicons'.setup {
   default = true
 }
+
+require('nvim-ts-autotag').setup(
+  {
+    filetypes = { "html", "javascript", "javascriptreact", "typescriptreact" }
+  }
+)
+
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -337,7 +349,7 @@ vim.keymap.set('n', '<leader>hk', require("harpoon.ui").nav_prev, { desc = 'Harp
 -- Keymaps for Trouble
 
 vim.keymap.set('n', '<leader>tt', ':TodoTelescope<CR>',
-  { noremap = true, silent = true, desc = 'Check [T]odos in [T]elescop' })
+  { noremap = true, silent = true, desc = 'Check [T]odos in [T]elescope' })
 
 -- [ UndoTree Keymaps ]]
 -- Keymaps for UndoTree
@@ -347,7 +359,11 @@ vim.keymap.set('n', '<leader>u', ':UndotreeToggle<CR>:UndotreeFocus<CR>')
 
 
 vim.opt.updatetime = 200
-
+vim.keymap.set('i', '<C-J>', 'copilot#Accept("<CR>")', {
+  expr = true,
+  replace_keycodes = false
+})
+vim.g.copilot_no_tab_map = true
 
 
 -- [[ Configure Telescope ]]
@@ -483,15 +499,6 @@ vim.defer_fn(function()
           ['[]'] = '@class.outer',
         },
       },
-      swap = {
-        enable = true,
-        swap_next = {
-          ['<leader>a'] = '@parameter.inner',
-        },
-        swap_previous = {
-          ['<leader>A'] = '@parameter.inner',
-        },
-      },
     },
   }
 end, 0)
@@ -564,7 +571,7 @@ require('which-key').register {
   ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
   ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
   ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
-  ['<leader>h'] = { name = 'More git', _ = 'which_key_ignore' },
+  ['<leader>h'] = { name = '[H]arpoon', _ = 'which_key_ignore' },
   ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
   ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
   ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
@@ -637,14 +644,12 @@ cmp.setup {
   },
   completion = {
     border = "rounded",
+    completeopt = 'menu,menuone,noinsert'
   },
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
     end,
-  },
-  completion = {
-    completeopt = 'menu,menuone,noinsert'
   },
   mapping = cmp.mapping.preset.insert {
     ['<C-n>'] = cmp.mapping.select_next_item(),
