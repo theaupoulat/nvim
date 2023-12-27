@@ -140,7 +140,7 @@ require('lazy').setup({
 
         -- don't override the built-in and fugitive keymaps
         local gs = package.loaded.gitsigns
-        vim.keymap.set({ 'n', 'v' }, ']c', function()
+        vim.keymap.set({ 'n', 'v' }, 'ghn', function()
           if vim.wo.diff then
             return ']c'
           end
@@ -149,7 +149,7 @@ require('lazy').setup({
           end)
           return '<Ignore>'
         end, { expr = true, buffer = bufnr, desc = 'Jump to next hunk' })
-        vim.keymap.set({ 'n', 'v' }, '[c', function()
+        vim.keymap.set({ 'n', 'v' }, 'ghp', function()
           if vim.wo.diff then
             return '[c'
           end
@@ -183,6 +183,7 @@ require('lazy').setup({
         theme = 'wombat',
         component_separators = '|',
         section_separators = '',
+        path = 1
       },
     },
   },
@@ -334,8 +335,25 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- [ Neotree Keymaps ]]
 -- Keymaps for neotree
 vim.keymap.set('n', '<leader>no', ':Neotree toggle<CR>', { noremap = true, silent = true, desc = '[O]pen Neotree' })
-vim.keymap.set('n', '<leader>nr', ':Neotree reveal<CR>',
+vim.keymap.set('n', '<leader>nr', ':Neotree reveal toggle<CR>',
   { noremap = true, silent = true, desc = '[R]eveal Neotree at current buffer' })
+
+vim.keymap.set('n', '<leader>ng', ':Neotree git_status toggle<CR>',
+  { noremap = true, silent = true, desc = 'Open [G]it status in Neotree' })
+
+
+vim.keymap.set('n', '<leader>nc', ':Neotree close <CR>',
+  { noremap = true, silent = true, desc = '[C]lose Neotree' })
+
+
+
+-- [ Git Keymaps ]]
+-- Keymaps for git
+
+vim.keymap.set('n', '<leader>gs', ':G<CR>', { noremap = true, silent = true, desc = '[S]tatus' })
+vim.keymap.set('n', '<leader>gb', ':G blame<CR>', { noremap = true, silent = true, desc = '[B]lame' })
+vim.keymap.set('n', '<leader>gc', ':G commit<CR>', { noremap = true, silent = true, desc = '[C]ommit' })
+
 
 
 -- [ Harpoon Keymaps ]]
@@ -555,7 +573,6 @@ require("conform").setup({
   },
   format_on_save = {
     lsp_fallback = true,
-    timeout_ms = 500,
   },
 })
 
@@ -572,6 +589,7 @@ require('which-key').register {
   ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
   ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
   ['<leader>h'] = { name = '[H]arpoon', _ = 'which_key_ignore' },
+  ['<leader>n'] = { name = '[N]eotree', _ = 'which_key_ignore' },
   ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
   ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
   ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
