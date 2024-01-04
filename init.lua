@@ -77,7 +77,12 @@ require('lazy').setup({
   'tpope/vim-sleuth',
 
   'nvim-tree/nvim-web-devicons',
-
+  {
+    'VonHeikemen/fine-cmdline.nvim',
+    dependencies = {
+      { 'MunifTanjim/nui.nvim' }
+    }
+  },
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
   {
@@ -172,7 +177,6 @@ require('lazy').setup({
       vim.cmd.colorscheme 'monokai-pro'
     end,
   },
-
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
@@ -187,7 +191,15 @@ require('lazy').setup({
       },
     },
   },
-
+  {
+    's1n7ax/nvim-window-picker',
+    name = 'window-picker',
+    event = 'VeryLazy',
+    version = '2.*',
+    config = function()
+      require 'window-picker'.setup()
+    end,
+  },
   {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
@@ -309,6 +321,24 @@ require('nvim-ts-autotag').setup(
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
+require('fine-cmdline').setup({
+  popup = {
+    position = {
+      row = "50%",
+      col = "50%",
+    },
+    border = {
+      style = "double",
+      text = {
+        top = "Command Line",
+        top_align = "left",
+      }
+    }
+  }
+})
+
+vim.api.nvim_set_keymap('n', ':', '<cmd>FineCmdline<CR>', { noremap = true })
+
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
@@ -341,6 +371,9 @@ vim.keymap.set('n', '<leader>nr', ':Neotree reveal toggle<CR>',
 vim.keymap.set('n', '<leader>ng', ':Neotree git_status toggle<CR>',
   { noremap = true, silent = true, desc = 'Open [G]it status in Neotree' })
 
+
+vim.keymap.set('n', '<leader>nf', ':Neotree focus <CR>',
+  { noremap = true, silent = true, desc = '[F]ocus Neotree' })
 
 vim.keymap.set('n', '<leader>nc', ':Neotree close <CR>',
   { noremap = true, silent = true, desc = '[C]lose Neotree' })
@@ -438,20 +471,33 @@ vim.api.nvim_create_user_command('LiveGrepGitRoot', live_grep_git_root, {})
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
-vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
+
+vim.keymap.set('n', '<leader><space>',
+  function() require('telescope.builtin').buffers { path_display = { "shorten" } } end,
+  { desc = '[ ] Find existing buffers' })
 vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
     winblend = 10,
-    previewer = false,
+    previewer = true,
   })
 end, { desc = '[/] Fuzzily search in current buffer' })
 
+vim.keymap.set('n', '<leader>sw',
+  function() require('telescope.builtin').grep_string { path_display = { "truncate" } } end,
+  { desc = '[S]earch current [W]ord' })
+
+vim.keymap.set('n', '<leader>sg', function() require('telescope.builtin').live_grep { path_display = { "truncate" } } end,
+  { desc = '[S]earch by [G]rep' })
+
+vim.keymap.set('n', '<leader>sf', function()
+    require('telescope.builtin').find_files { path_display = { 'truncate' } }
+  end,
+  { desc = '[S]earch [F]iles' })
+
 vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
-vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
-vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
-vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
+vim.keymap.set('n', '<leader>sm', require('telescope.builtin').man_pages, { desc = '[S]earch [M]an pages' })
 vim.keymap.set('n', '<leader>sG', ':LiveGrepGitRoot<cr>', { desc = '[S]earch by [G]rep on Git Root' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
