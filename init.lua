@@ -427,6 +427,12 @@ require('telescope').setup {
         ['<C-d>'] = false,
       },
     },
+    layout_config = {
+      center = {
+        width = 120, -- or any value you prefer
+        -- other layout configurations
+      },
+    },
   },
 }
 
@@ -487,7 +493,7 @@ vim.keymap.set('n', '<leader>sw',
   function() require('telescope.builtin').grep_string { path_display = { "truncate" } } end,
   { desc = '[S]earch current [W]ord' })
 
-vim.keymap.set('n', '<leader>sg', function() require('telescope.builtin').live_grep { path_display = { "truncate" } } end,
+vim.keymap.set('n', '<leader>sg', function() require('telescope.builtin').live_grep {} end,
   { desc = '[S]earch by [G]rep' })
 
 vim.keymap.set('n', '<leader>sf', function()
