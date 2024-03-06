@@ -366,11 +366,12 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 -- [ Neotree Keymaps ]]
 -- Keymaps for neotree
-vim.keymap.set('n', '<leader>no', ':Neotree toggle<CR>', { noremap = true, silent = true, desc = '[O]pen Neotree' })
-vim.keymap.set('n', '<leader>nr', ':Neotree reveal toggle<CR>',
+vim.keymap.set('n', '<leader>no', ':Neotree toggle position=right<CR>',
+  { noremap = true, silent = true, desc = '[O]pen Neotree' })
+vim.keymap.set('n', '<leader>nr', ':Neotree reveal position=right<CR>',
   { noremap = true, silent = true, desc = '[R]eveal Neotree at current buffer' })
 
-vim.keymap.set('n', '<leader>ng', ':Neotree git_status toggle<CR>',
+vim.keymap.set('n', '<leader>ng', ':Neotree git_status toggle position=right<CR>',
   { noremap = true, silent = true, desc = 'Open [G]it status in Neotree' })
 
 

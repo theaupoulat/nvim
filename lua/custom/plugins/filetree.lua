@@ -14,6 +14,7 @@ return {
       default_component_configs = {
         window = {
           width = 60,
+          position = "right",
         },
         indent = {
           indent_size = 1,
