@@ -78,6 +78,17 @@ require('lazy').setup({
 
   'nvim-tree/nvim-web-devicons',
   {
+    "NeogitOrg/neogit",
+    dependencies = {
+      "nvim-lua/plenary.nvim",  -- required
+      "sindrets/diffview.nvim", -- optional - Diff integration
+
+      -- Only one of these is needed, not both.
+      "nvim-telescope/telescope.nvim", -- optional
+    },
+    config = true
+  },
+  {
     'VonHeikemen/fine-cmdline.nvim',
     dependencies = {
       { 'MunifTanjim/nui.nvim' }
@@ -165,6 +176,12 @@ require('lazy').setup({
         end, { expr = true, buffer = bufnr, desc = 'Jump to previous hunk' })
       end,
     },
+  },
+  {
+    "samjwill/nvim-unception",
+    init = function()
+      vim.g.unception_open_buffer_in_new_tab = true
+    end
   },
   {
     -- Theme inspired by Atom
@@ -262,6 +279,15 @@ require('lazy').setup({
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
+--
+-- [[ Neovide Configuration ]]
+
+if vim.g.neovide then
+  vim.g.neovide_cursor_animation_length = 0.02
+  vim.g.neovide_cursor_trail_size = 0.1
+  vim.g.neovide_cursor_animate_command_line = false
+  vim.g.neovide_cursor_animate_in_insert_mode = false
+end
 
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -382,11 +408,13 @@ vim.keymap.set('n', '<leader>nc', ':Neotree close <CR>',
   { noremap = true, silent = true, desc = '[C]lose Neotree' })
 
 
+-- [ normal mode in terminal mode ]
+vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', { noremap = true, silent = true })
 
 -- [ Git Keymaps ]]
 -- Keymaps for git
 
-vim.keymap.set('n', '<leader>gs', ':G<CR>', { noremap = true, silent = true, desc = '[S]tatus' })
+vim.keymap.set('n', '<leader>gs', ':Neogit <CR>', { noremap = true, silent = true, desc = '[S]tatus' })
 vim.keymap.set('n', '<leader>gb', ':G blame<CR>', { noremap = true, silent = true, desc = '[B]lame' })
 vim.keymap.set('n', '<leader>gc', ':G commit<CR>', { noremap = true, silent = true, desc = '[C]ommit' })
 
@@ -402,9 +430,11 @@ vim.keymap.set('n', '<leader>hk', require("harpoon.ui").nav_prev, { desc = 'Harp
 -- [ Trouble Keymaps ]]
 -- Keymaps for Trouble
 
-vim.keymap.set('n', '<leader>tt', ':TodoTelescope<CR>',
-  { noremap = true, silent = true, desc = 'Check [T]odos in [T]elescope' })
+vim.keymap.set('n', '<leader>td', ':TodoTelescope<CR>',
+  { noremap = true, silent = true, desc = 'Check To[d]os in [T]elescope' })
 
+vim.keymap.set('n', '<leader>tt', ':TroubleToggle <CR>',
+  { noremap = true, silent = true, desc = '[T]oggle [T]rouble' })
 -- [ UndoTree Keymaps ]]
 -- Keymaps for UndoTree
 
