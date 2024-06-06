@@ -72,6 +72,7 @@ require('lazy').setup({
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
+  'alec-gibson/nvim-tetris',
 
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
@@ -233,6 +234,13 @@ require('lazy').setup({
     dependencies = { "nvim-tree/nvim-web-devicons" }
   },
   {
+    "ggandor/leap.nvim",
+    config = function() require('leap').create_default_mappings() end
+  },
+  {
+    'nvim-pack/nvim-spectre',
+  },
+  {
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
     dependencies = {
@@ -249,6 +257,12 @@ require('lazy').setup({
           return vim.fn.executable 'make' == 1
         end,
       },
+      {
+        "nvim-telescope/telescope-live-grep-args.nvim",
+        -- This will not install any breaking changes.
+        -- For major updates, this must be adjusted manually.
+        version = "^1.0.0",
+      }
     },
   },
 
@@ -323,7 +337,6 @@ vim.o.timeoutlen = 300
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
--- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
 -- Enable relative numbers
@@ -332,6 +345,14 @@ vim.opt.relativenumber = true
 
 -- Scroll padding
 vim.o.scrolloff = 8
+
+-- Folding
+vim.opt.foldenable = true
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldcolumn = "0"
+vim.opt.foldlevel = 99
+vim.opt.foldnestmax = 4
 
 require 'nvim-web-devicons'.setup {
   default = true
@@ -417,6 +438,8 @@ vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>gs', ':Neogit <CR>', { noremap = true, silent = true, desc = '[S]tatus' })
 vim.keymap.set('n', '<leader>gb', ':G blame<CR>', { noremap = true, silent = true, desc = '[B]lame' })
 vim.keymap.set('n', '<leader>gc', ':G commit<CR>', { noremap = true, silent = true, desc = '[C]ommit' })
+vim.keymap.set('n', '<leader>gd', ':Gitsigns diffthis<CR>',
+  { noremap = true, silent = true, desc = '[Diff] view of current file' })
 
 
 
@@ -472,6 +495,9 @@ require('telescope').setup {
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
 
+-- Enable telescope live grep args, if installed
+pcall(require('telescope').load_extension, 'live_grep_args')
+
 -- Telescope live_grep in git root
 -- Function to find the git root directory based on the current buffer's path
 local function find_git_root()
@@ -511,6 +537,10 @@ vim.api.nvim_create_user_command('LiveGrepGitRoot', live_grep_git_root, {})
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 
+vim.keymap.set('n', '<leader>sg',
+  ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>",
+  { desc = '[S]earch by [G]rep' })
+
 vim.keymap.set('n', '<leader><space>',
   function() require('telescope.builtin').buffers { path_display = { "shorten" } } end,
   { desc = '[ ] Find existing buffers' })
@@ -526,9 +556,6 @@ vim.keymap.set('n', '<leader>sw',
   function() require('telescope.builtin').grep_string { path_display = { "truncate" } } end,
   { desc = '[S]earch current [W]ord' })
 
-vim.keymap.set('n', '<leader>sg', function() require('telescope.builtin').live_grep {} end,
-  { desc = '[S]earch by [G]rep' })
-
 vim.keymap.set('n', '<leader>sf', function()
     require('telescope.builtin').find_files { path_display = { 'truncate' } }
   end,
@@ -542,6 +569,20 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
 
 -- [[ More telescope]]
+--
+--
+vim.keymap.set('n', '<leader>S', '<cmd>lua require("spectre").toggle()<CR>', {
+  desc = "Toggle Spectre"
+})
+vim.keymap.set('n', '<leader>sw', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
+  desc = "Search current word"
+})
+vim.keymap.set('v', '<leader>sw', '<esc><cmd>lua require("spectre").open_visual()<CR>', {
+  desc = "Search current word"
+})
+vim.keymap.set('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
+  desc = "Search on current file"
+})
 --
 
 
