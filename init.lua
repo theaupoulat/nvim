@@ -113,10 +113,11 @@ require('lazy').setup({
       'folke/neodev.nvim',
     },
   },
-  {
-    'stevearc/conform.nvim',
-    opts = {},
-  },
+  -- {
+  --   'stevearc/conform.nvim',
+  --   opts = {},
+  -- },
+  { 'sbdchd/neoformat' },
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -139,7 +140,7 @@ require('lazy').setup({
     'windwp/nvim-ts-autotag',
   },
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  { 'folke/which-key.nvim', opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -228,7 +229,7 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim',  opts = {} },
   {
     "folke/trouble.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" }
@@ -409,6 +410,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
   group = highlight_group,
   pattern = '*',
+})
+
+-- Create an augroup named 'fmt'
+local fmt_group = vim.api.nvim_create_augroup("fmt", { clear = true })
+
+-- Create an autocmd for 'BufWritePre' that triggers 'Neoformat'
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = fmt_group,
+  pattern = "*",
+  command = "undojoin | Neoformat",
 })
 
 -- [ Neotree Keymaps ]]
@@ -692,22 +703,22 @@ local on_attach = function(_, bufnr)
   end, { desc = 'Format current buffer with LSP' })
 end
 
-require("conform").setup({
-  formatters_by_ft = {
-    typescript = { "prettierd" },
-    typescriptreact = { "prettierd" }
-  },
-  format_on_save = {
-    lsp_fallback = true,
-  },
-})
+-- require("conform").setup({
+--   formatters_by_ft = {
+--     typescript = { "prettierd" },
+--     typescriptreact = { "prettierd" }
+--   },
+--   format_on_save = {
+--     lsp_fallback = true,
+--   },
+-- })
 
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*",
-  callback = function(args)
-    require("conform").format({ bufnr = args.buf })
-  end,
-})
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--   pattern = "*",
+--   callback = function(args)
+--     require("conform").format({ bufnr = args.buf })
+--   end,
+-- })
 
 -- document existing key chains
 require('which-key').register {
