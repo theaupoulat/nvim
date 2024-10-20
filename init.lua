@@ -113,10 +113,6 @@ require('lazy').setup({
       'folke/neodev.nvim',
     },
   },
-  -- {
-  --   'stevearc/conform.nvim',
-  --   opts = {},
-  -- },
   { 'sbdchd/neoformat' },
   {
     -- Autocompletion
@@ -132,9 +128,6 @@ require('lazy').setup({
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
     },
-  },
-  {
-    'github/copilot.vim'
   },
   {
     'windwp/nvim-ts-autotag',
@@ -178,12 +171,6 @@ require('lazy').setup({
         end, { expr = true, buffer = bufnr, desc = 'Jump to previous hunk' })
       end,
     },
-  },
-  {
-    "samjwill/nvim-unception",
-    init = function()
-      vim.g.unception_open_buffer_in_new_tab = true
-    end
   },
   {
     -- Theme inspired by Atom
@@ -266,7 +253,6 @@ require('lazy').setup({
       }
     },
   },
-
   {
     -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
@@ -276,18 +262,6 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
-  -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
-  --       These are some example plugins that I've included in the kickstart repository.
-  --       Uncomment any of the lines below to enable them.
-  -- require 'kickstart.plugins.autoformat',
-  -- require 'kickstart.plugins.debug',
-
-  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
-  --    up-to-date with whatever is in the kickstart repo.
-  --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  --
-  --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
   { import = 'custom.plugins' },
 }, {})
 
@@ -295,6 +269,8 @@ require('lazy').setup({
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
 --
+
+
 -- [[ Neovide Configuration ]]
 
 if vim.g.neovide then
@@ -422,7 +398,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   command = "undojoin | Neoformat",
 })
 
--- [ Neotree Keymaps ]]
+-- [[ Neotree Keymaps ]]
 -- Keymaps for neotree
 vim.keymap.set('n', '<leader>no', ':Neotree toggle position=right<CR>',
   { noremap = true, silent = true, desc = '[O]pen Neotree' })
@@ -431,7 +407,6 @@ vim.keymap.set('n', '<leader>nr', ':Neotree reveal position=right<CR>',
 
 vim.keymap.set('n', '<leader>ng', ':Neotree git_status toggle position=right<CR>',
   { noremap = true, silent = true, desc = 'Open [G]it status in Neotree' })
-
 
 vim.keymap.set('n', '<leader>nf', ':Neotree focus <CR>',
   { noremap = true, silent = true, desc = '[F]ocus Neotree' })
@@ -443,34 +418,32 @@ vim.keymap.set('n', '<leader>nc', ':Neotree close <CR>',
 -- [ normal mode in terminal mode ]
 vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', { noremap = true, silent = true })
 
--- [ Git Keymaps ]]
--- Keymaps for git
+
+-- [[ Git Keymaps ]]
 
 vim.keymap.set('n', '<leader>gs', ':Neogit <CR>', { noremap = true, silent = true, desc = '[S]tatus' })
 vim.keymap.set('n', '<leader>gb', ':G blame<CR>', { noremap = true, silent = true, desc = '[B]lame' })
-vim.keymap.set('n', '<leader>gc', ':G commit<CR>', { noremap = true, silent = true, desc = '[C]ommit' })
 vim.keymap.set('n', '<leader>gd', ':Gitsigns diffthis<CR>',
   { noremap = true, silent = true, desc = '[Diff] view of current file' })
 
 
 
--- [ Harpoon Keymaps ]]
--- Keymaps for harpoon
+-- [[ Harpoon Keymaps ]]
 vim.keymap.set('n', '<leader>ha', require('harpoon.mark').add_file, { desc = 'Harpoon: [A]dd mark' })
 vim.keymap.set('n', '<leader>hm', require("harpoon.ui").toggle_quick_menu, { desc = 'Harpoon: Toggle [M]enu' })
 vim.keymap.set('n', '<leader>hj', require("harpoon.ui").nav_next, { desc = 'Harpoon: Navigate to next mark' })
 vim.keymap.set('n', '<leader>hk', require("harpoon.ui").nav_prev, { desc = 'Harpoon: Navigate to prev mark' })
 
--- [ Trouble Keymaps ]]
--- Keymaps for Trouble
+-- [[ Trouble Keymaps ]]
 
 vim.keymap.set('n', '<leader>td', ':TodoTelescope<CR>',
   { noremap = true, silent = true, desc = 'Check To[d]os in [T]elescope' })
 
 vim.keymap.set('n', '<leader>tt', ':TroubleToggle <CR>',
   { noremap = true, silent = true, desc = '[T]oggle [T]rouble' })
--- [ UndoTree Keymaps ]]
--- Keymaps for UndoTree
+
+
+-- [[ UndoTree Keymaps ]]
 
 vim.keymap.set('n', '<leader>u', ':UndotreeToggle<CR>:UndotreeFocus<CR>')
 
@@ -486,6 +459,7 @@ vim.g.copilot_no_tab_map = true
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
+
 require('telescope').setup {
   defaults = {
     mappings = {
@@ -600,6 +574,7 @@ vim.keymap.set('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search(
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 -- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
+--
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
@@ -660,13 +635,8 @@ end, 0)
 
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
+
 local on_attach = function(_, bufnr)
-  -- NOTE: Remember that lua is a real programming language, and as such it is possible
-  -- to define small helper and utility functions so you don't have to repeat yourself
-  -- many times.
-  --
-  -- In this case, we create a function that lets us more easily define mappings specific
-  -- for LSP related items. It sets the mode, buffer and description for us each time.
   local nmap = function(keys, func, desc)
     if desc then
       desc = 'LSP: ' .. desc
@@ -703,23 +673,6 @@ local on_attach = function(_, bufnr)
   end, { desc = 'Format current buffer with LSP' })
 end
 
--- require("conform").setup({
---   formatters_by_ft = {
---     typescript = { "prettierd" },
---     typescriptreact = { "prettierd" }
---   },
---   format_on_save = {
---     lsp_fallback = true,
---   },
--- })
-
--- vim.api.nvim_create_autocmd("BufWritePre", {
---   pattern = "*",
---   callback = function(args)
---     require("conform").format({ bufnr = args.buf })
---   end,
--- })
-
 -- document existing key chains
 require('which-key').register {
   ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
@@ -750,7 +703,6 @@ local servers = {
   -- gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
-  -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
   lua_ls = {
