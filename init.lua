@@ -289,6 +289,7 @@ require('lazy').setup({
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
         { '<leader>w', group = '[W]orkspace' },
+        { '<leader>q', group = '[Q]uickfix' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk and [H]arpoon', mode = { 'n', 'v' } },
       },
