@@ -249,19 +249,6 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>tc', ':TSCClose<CR>', { desc = '[C]lose TSC window' })
     end,
   },
-
-  {
-    'lewis6991/gitsigns.nvim', -- Adds git related signs to the gutter, as well as utilities for managing changes
-    opts = {
-      signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
-    },
-  },
   {
     'folke/which-key.nvim', -- displays available keybinds from currently pressed key
     event = 'VimEnter',
