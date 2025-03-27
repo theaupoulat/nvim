@@ -180,6 +180,11 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- [[ Quickfix list keymaps]]
+vim.keymap.set('n', '<M-j>', '<cmd>cnext<CR>', { desc = '[Q]uickfix: next entry' })
+vim.keymap.set('n', '<M-k>', '<cmd>cprev<CR>', { desc = '[Q]uickfix: previous entry' })
+vim.keymap.set('n', '<leader>qo', '<cmd>copen<CR>', { desc = '[Q]uickfix: open' })
+vim.keymap.set('n', '<leader>qc', '<cmd>cclose<CR>', { desc = '[Q]uickfix: close' })
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
