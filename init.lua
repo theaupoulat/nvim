@@ -300,31 +300,6 @@ require('lazy').setup({
     -- See `:help lualine.txt`
   },
   {
-    'VonHeikemen/fine-cmdline.nvim',
-    dependencies = {
-      { 'MunifTanjim/nui.nvim' },
-    },
-    config = function()
-      require('fine-cmdline').setup {
-        popup = {
-          position = {
-            row = '50%',
-            col = '50%',
-          },
-          border = {
-            style = 'double',
-            text = {
-              top = 'Command Line',
-              top_align = 'left',
-            },
-          },
-        },
-      }
-
-      vim.api.nvim_set_keymap('n', ':', '<cmd>FineCmdline<CR>', { noremap = true })
-    end,
-  },
-  {
     'nvim-telescope/telescope.nvim', -- Fuzzy Finder (files, lsp, etc)
     event = 'VimEnter',
     branch = '0.1.x',
