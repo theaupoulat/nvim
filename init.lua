@@ -326,27 +326,6 @@ require('lazy').setup({
       end, { desc = '[S]earch [N]eovim files' })
     end,
   },
-  {
-    'nvim-pack/nvim-spectre', -- search and replace capabilities
-    config = function()
-      vim.keymap.set('n', '<leader>S', '<cmd>lua require("spectre").toggle()<CR>', {
-        desc = 'Toggle Spectre',
-      })
-
-      vim.keymap.set('n', '<leader>srw', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
-        desc = '[S]earch and [R]eplace current word',
-      })
-
-      vim.keymap.set('v', '<leader>srw', '<esc><cmd>lua require("spectre").open_visual()<CR>', {
-        desc = '[S]earch and [R]eplace current word',
-      })
-
-      vim.keymap.set('n', '<leader>srp', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
-        desc = '[S]earch and [R]eplace on current file',
-      })
-    end,
-  },
-
   -- LSP Plugins
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
