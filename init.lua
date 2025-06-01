@@ -62,6 +62,13 @@ end)
 -- Enable break indent
 vim.opt.breakindent = true
 
+-- folding
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 1
+vim.opt.foldnestmax = 3
+
 -- Save undo history
 vim.opt.undofile = true
 
