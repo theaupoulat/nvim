@@ -67,7 +67,7 @@ vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 1
-vim.opt.foldnestmax = 3
+vim.opt.foldnestmax = 1
 
 -- Save undo history
 vim.opt.undofile = true
