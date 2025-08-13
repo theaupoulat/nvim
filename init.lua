@@ -403,7 +403,3 @@ require('lazy').setup({
     },
   },
 })
-
-vim.lsp.enable { 'ts-ls' }
-vim.diagnostic.config { virtual_text = true }
-vim.diagnostic.enable()
