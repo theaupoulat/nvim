@@ -12,7 +12,7 @@ return {
     explorer = { enabled = false },
     indent = { enabled = true },
     input = { enabled = true },
-    gitbrowse = { enabled = true },
+    git;rowse = { enabled = true },
     picker = { enabled = true },
     notifier = { enabled = true },
     quickfile = { enabled = true },
@@ -61,7 +61,7 @@ return {
     {
       '<leader>gB',
       function()
-        Snacks.gitbrowse()
+        Snacks.gitbrowse({branch = 'main'})
       end,
       desc = 'Git Browse',
       mode = { 'n', 'v' },
