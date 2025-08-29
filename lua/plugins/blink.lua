@@ -35,7 +35,7 @@ return { -- Autocompletion
     },
 
     completion = {
-      documentation = { auto_show = false },
+      documentation = { auto_show = true },
     },
 
     sources = {
