@@ -29,6 +29,7 @@ return { -- Autoformat
       lua = { 'stylua' },
       typescript = { 'biome', 'biome-organize-imports' },
       typescriptreact = { 'biome', 'biome-organize-imports' },
+      json = { 'biome' },
     },
   },
 }
