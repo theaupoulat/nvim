@@ -45,6 +45,7 @@ return {
       { '<leader>d', group = '[D]ocument' },
       { '<leader>r', group = '[R]ename' },
       { '<leader>s', group = '[S]earch' },
+      { '<leader>sp', group = '[S]earch in [p]roject' },
       { '<leader>q', group = '[Q]uickfix' },
       { '<leader>t', group = '[T]oggle' },
       { '<leader>g', group = '[G]it and Github' },
