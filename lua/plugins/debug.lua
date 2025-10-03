@@ -16,6 +16,8 @@ return {
       end,
       desc = '[D]ebug [p]lain with console.log',
     })
+
+    vim.keymap.set('n', '<leader>dj', 'ciwJSON.stringify(<esc>pa, null, 2)<esc>', { desc = '[D]ebug log for [J]SON-like value' })
   end,
   dependencies = {
     'echasnovski/mini.nvim', -- Optional: Needed for line highlighting (full mini.nvim plugin)
