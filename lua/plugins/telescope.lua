@@ -30,6 +30,11 @@ return {
         layout_strategy = 'vertical',
       },
       -- pickers = {}
+      pickers = {
+        lsp_references = {
+          fname_width = 100,
+        },
+      },
       extensions = {
         ['ui-select'] = {
           require('telescope.themes').get_dropdown(),
@@ -52,7 +57,7 @@ return {
 
     vim.keymap.set('n', '<leader>sps', function()
       builtin.live_grep {
-        search_dirs = { '~/Code/inato-marketplace/packages/marketplace-domain' },
+        search_dirs = { '~/Code/inato-marketplace/packages/server' },
         prompt_title = 'Search string in server files',
       }
     end, { desc = '[S]earch in [p]ackage: [s]erver files' })
