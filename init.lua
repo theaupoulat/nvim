@@ -193,6 +193,7 @@ require('lazy').setup({
         ts_ls = {},
         --
 
+        tailwindcss = {},
         lua_ls = {
           settings = {
             Lua = {
