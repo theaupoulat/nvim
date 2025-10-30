@@ -57,21 +57,21 @@ return {
 
     vim.keymap.set('n', '<leader>sps', function()
       builtin.live_grep {
-        search_dirs = { '~/Code/inato-marketplace/packages/server' },
+        search_dirs = { '~/Code/inato-marketplace/packages/server/src' },
         prompt_title = 'Search string in server files',
       }
     end, { desc = '[S]earch in [p]ackage: [s]erver files' })
 
     vim.keymap.set('n', '<leader>spf', function()
       builtin.live_grep {
-        search_dirs = { '~/Code/inato-marketplace/packages/marketplace' },
+        search_dirs = { '~/Code/inato-marketplace/packages/marketplace/src' },
         prompt_title = 'Search string in marketplace files',
       }
     end, { desc = '[S]earch in [p]ackage: marketplace' })
 
     vim.keymap.set('n', '<leader>spd', function()
       builtin.live_grep {
-        search_dirs = { '~/Code/inato-marketplace/packages/marketplace-domain' },
+        search_dirs = { '~/Code/inato-marketplace/packages/marketplace-domain/src' },
         prompt_title = 'Search string in marketplace-domain files',
       }
     end, { desc = '[S]earch in [p]ackage: marketplace-[d]omain' })
