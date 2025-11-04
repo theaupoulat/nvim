@@ -1,3 +1,36 @@
+local fullscreen_setup = {
+  borderchars = { '─', '│', '─', '│', '┌', '┐', '┘', '└' },
+  preview = { hide_on_startup = false },
+  layout_strategy = 'vertical',
+  layout_config = {
+    flex = { flip_columns = 100 },
+    horizontal = {
+      mirror = false,
+      prompt_position = 'top',
+      width = function(_, cols, _)
+        return cols
+      end,
+      height = function(_, _, rows)
+        return rows
+      end,
+      preview_cutoff = 10,
+      preview_width = 0.5,
+    },
+    vertical = {
+      mirror = true,
+      prompt_position = 'top',
+      width = function(_, cols, _)
+        return cols
+      end,
+      height = function(_, _, rows)
+        return rows
+      end,
+      preview_cutoff = 10,
+      preview_height = 0.5,
+    },
+  },
+}
+
 return {
   'nvim-telescope/telescope.nvim', -- Fuzzy Finder (files, lsp, etc)
   event = 'VimEnter',
@@ -26,9 +59,7 @@ return {
       -- You can put your default mappings / updates / etc. in here
       --  All the info you're looking for is in `:help telescope.setup()`
       --
-      defaults = {
-        layout_strategy = 'vertical',
-      },
+      defaults = fullscreen_setup,
       -- pickers = {}
       pickers = {
         lsp_references = {
