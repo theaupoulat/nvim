@@ -17,15 +17,15 @@ local fullscreen_setup = {
       preview_width = 0.5,
     },
     vertical = {
-      mirror = true,
-      prompt_position = 'top',
+      mirror = false,
+      prompt_position = 'bottom',
       width = function(_, cols, _)
         return cols
       end,
       height = function(_, _, rows)
         return rows
       end,
-      preview_cutoff = 10,
+      preview_cutoff = 20,
       preview_height = 0.5,
     },
   },
