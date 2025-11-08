@@ -2,8 +2,19 @@ vim.keymap.set('n', '<M-l>', ':Gitsigns next_hunk<CR>', { desc = 'Next hunk' })
 vim.keymap.set('n', '<M-h>', ':Gitsigns prev_hunk<CR>', { desc = 'Previous hunk' })
 vim.keymap.set('n', '<leader>hq', ':Gitsigns setqflist<CR>', { desc = 'git show hunks in [Q]uicklist' })
 vim.keymap.set('n', '<leader>gp', ':!gh pr view --web<CR>', { desc = 'In [G]ithub, open current branch [P]R' })
+vim.keymap.set('n', '<leader>hg', '<cmd>Neogit<CR>', { desc = 'Open Neo[g]it' })
+vim.keymap.set('n', '<leader>hd', '<cmd>DiffviewFileHistory %<CR>', { desc = 'See [d]iff history for current file' })
 
 return {
+  {
+    'NeogitOrg/neogit',
+    dependencies = {
+      'nvim-lua/plenary.nvim', -- required
+      'sindrets/diffview.nvim', -- optional - Diff integration
+      'nvim-telescope/telescope.nvim',
+    },
+    config = true,
+  },
   'tpope/vim-fugitive',
   {
     'lewis6991/gitsigns.nvim', -- Adds git related signs to the gutter, as well as utilities for managing changes
@@ -67,5 +78,18 @@ return {
         changedelete = { text = '~' },
       },
     },
+  },
+  {
+    'pwntester/octo.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      -- OR 'ibhagwan/fzf-lua',
+      -- OR 'folke/snacks.nvim',
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      require('octo').setup()
+    end,
   },
 }
