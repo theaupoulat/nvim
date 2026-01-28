@@ -128,6 +128,13 @@ return {
       }
     end, { desc = '[S]earch in [p]ackage: marketplace-[d]omain' })
 
+    vim.keymap.set('n', '<leader>spe', function()
+      builtin.live_grep {
+        search_dirs = { '~/Code/inato-marketplace/packages/ehr-integration/src' },
+        prompt_title = 'Search string in ehr-integration src files',
+      }
+    end, { desc = '[S]earch in [p]ackage: [e]hr-integration' })
+
     vim.keymap.set('n', '<leader>s/', function()
       builtin.live_grep {
         cwd = vim.fn.expand '%:p:h', -- Set search directory to current buffer's dir
