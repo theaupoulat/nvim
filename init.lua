@@ -186,6 +186,18 @@ require('lazy').setup({
         },
       }
 
+      require('lspconfig').ast_grep.setup {
+        filetypes = { 'javascript', 'typescript', 'typescriptreact', 'javascriptreact' },
+        root_dir = require('lspconfig.util').root_pattern('packages/ast-grep-rules/sgconfig.yml', '.git'),
+        on_new_config = function(new_config, root_dir)
+          new_config.cmd = {
+            root_dir .. '/packages/ast-grep-rules/node_modules/.bin/ast-grep',
+            'lsp',
+            '--config',
+            root_dir .. '/packages/ast-grep-rules/sgconfig.yml',
+          }
+        end,
+      }
       local capabilities = require('blink.cmp').get_lsp_capabilities()
       local servers = {
         -- Some languages (like typescript) have entire language plugins that can be useful:

@@ -46,6 +46,7 @@ return {
       end,
     },
     { 'nvim-telescope/telescope-ui-select.nvim' },
+    { 'Marskey/telescope-sg' },
     { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
   },
   config = function()
@@ -67,6 +68,14 @@ return {
         },
       },
       extensions = {
+        ast_grep = {
+          command = {
+            'sg', -- For Linux, use `ast-grep` instead of `sg`
+            '--json=stream',
+          }, -- must have --json=stream
+          grep_open_files = false, -- search in opened files
+          lang = nil, -- string value, specify language for ast-grep `nil` for default
+        },
         ['ui-select'] = {
           require('telescope.themes').get_dropdown(),
         },
