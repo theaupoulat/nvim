@@ -1,29 +1,44 @@
 local M = {}
 
-local MONOREPO_ROOT = vim.fn.expand '~/Code/inato-marketplace'
 local DOMAIN_BASE = 'packages/marketplace-domain/src/domain'
 local PERSISTENCE_BASE = 'packages/marketplace-domain/src/application/persistence'
+local MONOREPO_MARKER = 'packages/marketplace-domain'
+
+--- Walks up from `filepath` until it finds a directory containing the monorepo marker.
+---@param filepath string absolute file path
+---@return string|nil root absolute path to the monorepo root
+local function find_monorepo_root(filepath)
+  local dir = vim.fn.fnamemodify(filepath, ':h')
+  while dir ~= '/' do
+    if vim.fn.isdirectory(dir .. '/' .. MONOREPO_MARKER) == 1 then
+      return dir
+    end
+    dir = vim.fn.fnamemodify(dir, ':h')
+  end
+  return nil
+end
 
 --- Strips "Drizzle" prefix and "Repository" suffix from a drizzle directory name,
 --- then checks the filesystem to find the matching domain directory.
 --- Handles both single-segment (PatientAccess) and multi-segment (DocumentManagement/DocumentRequirements).
 ---@param drizzle_dir_name string e.g. "DrizzlePatientAccessRepository"
+---@param root string absolute path to the monorepo root
 ---@return string|nil segments e.g. "PatientAccess" or "DocumentManagement/DocumentRequirements"
-local function resolve_drizzle_to_segments(drizzle_dir_name)
+local function resolve_drizzle_to_segments(drizzle_dir_name, root)
   local name = drizzle_dir_name:match '^Drizzle(.+)Repository$'
   if not name then
     return nil
   end
 
   -- Try single segment first (most common)
-  local single = MONOREPO_ROOT .. '/' .. DOMAIN_BASE .. '/' .. name .. '/Repository'
+  local single = root .. '/' .. DOMAIN_BASE .. '/' .. name .. '/Repository'
   if vim.fn.isdirectory(single) == 1 then
     return name
   end
 
   -- Try splitting PascalCase into two segments
   -- e.g. "DocumentManagementDocumentRequirements" -> "DocumentManagement/DocumentRequirements"
-  local domain_dir = MONOREPO_ROOT .. '/' .. DOMAIN_BASE
+  local domain_dir = root .. '/' .. DOMAIN_BASE
   local entries = vim.fn.readdir(domain_dir)
   for _, dir in ipairs(entries) do
     if name:sub(1, #dir) == dir then
@@ -54,8 +69,9 @@ end
 
 --- Detects which file type we're in and extracts the aggregate segments.
 ---@param filepath string absolute file path
+---@param root string absolute path to the monorepo root
 ---@return string|nil segments e.g. "PatientAccess" or "DocumentManagement/DocumentRequirements"
-function M.parse_current_file(filepath)
+function M.parse_current_file(filepath, root)
   local expanded = vim.fn.expand(filepath)
 
   -- Try domain-based paths (Interface, InMemory)
@@ -85,7 +101,7 @@ function M.parse_current_file(filepath)
   if rel then
     local drizzle_dir = rel:match '^(Drizzle%w+Repository)/repository%.ts$'
     if drizzle_dir then
-      return resolve_drizzle_to_segments(drizzle_dir)
+      return resolve_drizzle_to_segments(drizzle_dir, root)
     end
   end
 
@@ -94,37 +110,28 @@ end
 
 --- Constructs paths to the 3 repository files for a given aggregate.
 ---@param segments string e.g. "PatientAccess"
+---@param root string absolute path to the monorepo root
 ---@return { label: string, path: string }[]
-function M.build_repository_paths(segments)
+function M.build_repository_paths(segments, root)
   -- Build the PascalCase name by removing slashes for the Drizzle directory name
   local name = segments:gsub('/', '')
 
   local candidates = {
     {
       label = 'Interface',
-      path = MONOREPO_ROOT .. '/' .. DOMAIN_BASE .. '/' .. segments .. '/Repository/Repository.ts',
+      path = root .. '/' .. DOMAIN_BASE .. '/' .. segments .. '/Repository/Repository.ts',
     },
     {
       label = 'InMemory',
-      path = MONOREPO_ROOT .. '/' .. DOMAIN_BASE .. '/' .. segments .. '/Repository/InMemoryRepository.ts',
+      path = root .. '/' .. DOMAIN_BASE .. '/' .. segments .. '/Repository/InMemoryRepository.ts',
     },
     {
       label = 'InMemory (nested)',
-      path = MONOREPO_ROOT
-        .. '/'
-        .. DOMAIN_BASE
-        .. '/'
-        .. segments
-        .. '/Repository/InMemory/InMemoryRepository.ts',
+      path = root .. '/' .. DOMAIN_BASE .. '/' .. segments .. '/Repository/InMemory/InMemoryRepository.ts',
     },
     {
       label = 'Drizzle',
-      path = MONOREPO_ROOT
-        .. '/'
-        .. PERSISTENCE_BASE
-        .. '/Drizzle'
-        .. name
-        .. 'Repository/repository.ts',
+      path = root .. '/' .. PERSISTENCE_BASE .. '/Drizzle' .. name .. 'Repository/repository.ts',
     },
   }
 
@@ -144,13 +151,19 @@ function M.navigate_to_implementations()
   local word = vim.fn.expand '<cword>'
   local filepath = vim.fn.expand '%:p'
 
-  local segments = M.parse_current_file(filepath)
+  local root = find_monorepo_root(filepath)
+  if not root then
+    vim.notify('Not inside an inato-marketplace clone', vim.log.levels.WARN)
+    return
+  end
+
+  local segments = M.parse_current_file(filepath, root)
   if not segments then
     vim.notify('Could not detect repository aggregate from current file', vim.log.levels.WARN)
     return
   end
 
-  local paths = M.build_repository_paths(segments)
+  local paths = M.build_repository_paths(segments, root)
   if #paths == 0 then
     vim.notify('No repository files found for: ' .. segments, vim.log.levels.WARN)
     return
