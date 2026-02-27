@@ -15,6 +15,11 @@ return {
     },
     config = true,
   },
+  {
+    'esmuellert/codediff.nvim',
+    dependencies = { 'MunifTanjim/nui.nvim' },
+    cmd = 'CodeDiff',
+  },
   'tpope/vim-fugitive',
   {
     'lewis6991/gitsigns.nvim', -- Adds git related signs to the gutter, as well as utilities for managing changes
