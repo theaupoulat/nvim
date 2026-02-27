@@ -1,22 +1,8 @@
 local M = {}
 
+local monorepo = require 'utils.monorepo'
 local DOMAIN_BASE = 'packages/marketplace-domain/src/domain'
 local PERSISTENCE_BASE = 'packages/marketplace-domain/src/application/persistence'
-local MONOREPO_MARKER = 'packages/marketplace-domain'
-
---- Walks up from `filepath` until it finds a directory containing the monorepo marker.
----@param filepath string absolute file path
----@return string|nil root absolute path to the monorepo root
-local function find_monorepo_root(filepath)
-  local dir = vim.fn.fnamemodify(filepath, ':h')
-  while dir ~= '/' do
-    if vim.fn.isdirectory(dir .. '/' .. MONOREPO_MARKER) == 1 then
-      return dir
-    end
-    dir = vim.fn.fnamemodify(dir, ':h')
-  end
-  return nil
-end
 
 --- Strips "Drizzle" prefix and "Repository" suffix from a drizzle directory name,
 --- then checks the filesystem to find the matching domain directory.
@@ -151,7 +137,7 @@ function M.navigate_to_implementations()
   local word = vim.fn.expand '<cword>'
   local filepath = vim.fn.expand '%:p'
 
-  local root = find_monorepo_root(filepath)
+  local root = monorepo.find_monorepo_root(filepath)
   if not root then
     vim.notify('Not inside an inato-marketplace clone', vim.log.levels.WARN)
     return
