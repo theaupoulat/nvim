@@ -149,5 +149,9 @@ return {
         cwd = vim.fn.expand '%:p:h', -- Set search directory to current buffer's dir
       }
     end, { desc = '[S]earch by [G]rep from CWD' })
+
+    vim.keymap.set('n', '<leader>si', function()
+      require('utils.repository_navigator').navigate_to_implementations()
+    end, { desc = '[S]earch repository [I]mplementations' })
   end,
 }
